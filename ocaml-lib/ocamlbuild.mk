@@ -1,4 +1,7 @@
 INSTALLDIR := $(shell ocamlfind printconf destdir)
+ifeq ($(OS),Windows_NT)
+	INSTALLDIR := $(shell cygpath -u $(INSTALLDIR))
+endif
 LOCALINSTALDIR := local
 
 all: extract_zarith extract_num

@@ -23,9 +23,18 @@ homepage: "http://www.cl.cam.ac.uk/~pes20/lem/"
 bug-reports: "https://github.com/rems-project/lem/issues"
 license: ["BSD-3-Clause" "LGPL-2.1-or-later"]
 dev-repo: "git+https://github.com/rems-project/lem.git"
-build: [make "INSTALL_DIR=%{prefix}%"]
-install: [make "INSTALL_DIR=%{prefix}%" "install"]
-remove: [make "INSTALL_DIR=%{prefix}%" "uninstall"]
+build: [
+  [make "INSTALL_DIR=%{prefix}%"] {os != "win32"}
+  [make "INSTALL_DIR=$(cygpath -u %{prefix}%)"] {os = "win32"}
+]
+install: [
+  [make "INSTALL_DIR=%{prefix}%" "install"] {os != "win32"}
+  [make "INSTALL_DIR=$(cygpath -u %{prefix}%)" "install"] {os = "win32"}
+]
+remove: [
+  [make "INSTALL_DIR=%{prefix}%" "uninstall"] {os != "win32"}
+  [make "INSTALL_DIR=$(cygpath -u %{prefix}%)" "uninstall"] {os = "win32"}
+]
 depends: [
   "ocaml" {>= "4.07.0"}
   "ocamlfind" {build & >= "1.5.1"}
