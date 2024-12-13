@@ -6,7 +6,12 @@ LEMVERSION:=$(shell git describe --dirty --always 2>/dev/null || echo $(LEMRELEA
 DDIR=lem-$(LEMVERSION)
 
 # by default assume local install
-INSTALL_DIR := $(realpath .)
+ORIG_INSTALL_DIR := $(realpath .)
+ifeq ($(OS),Windows_NT)
+	INSTALL_DIR := $(shell cygpath -u "$(ORIG_INSTALL_DIR)")
+else
+	INSTALL_DIR := $(ORIG_INSTALL_DIR)
+endif
 
 #all: il.pdf build-main ilTheory.uo
 all: bin/lem libs_phase_1
@@ -15,8 +20,13 @@ all: bin/lem libs_phase_1
 
 install:
 	mkdir -p $(INSTALL_DIR)/bin
+ifeq ($(OS),Windows_NT)
+	rm -f $(INSTALL_DIR)/bin/lem.exe
+	cp src/main.native $(INSTALL_DIR)/bin/lem.exe
+else
 	rm -f $(INSTALL_DIR)/bin/lem
 	cp src/main.native $(INSTALL_DIR)/bin/lem
+endif
 	rm -rf $(INSTALL_DIR)/share/lem
 	mkdir -p $(INSTALL_DIR)/share/lem/library
 	cp library/*.lem $(INSTALL_DIR)/share/lem/library
