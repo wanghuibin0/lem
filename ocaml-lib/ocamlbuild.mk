@@ -1,6 +1,6 @@
 ORIG_INSTALLDIR := $(shell ocamlfind printconf destdir)
 ifeq ($(OS),Windows_NT)
-	INSTALLDIR := $(shell cygpath -u "$(ORIG_INSTALLDIR)")
+	INSTALLDIR := $(subst \,/,$(ORIG_INSTALLDIR))
 else
 	INSTALLDIR := $(ORIG_INSTALLDIR)
 endif

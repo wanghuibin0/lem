@@ -8,7 +8,7 @@ DDIR=lem-$(LEMVERSION)
 # by default assume local install
 ORIG_INSTALL_DIR := $(realpath .)
 ifeq ($(OS),Windows_NT)
-	INSTALL_DIR := $(shell cygpath -u "$(ORIG_INSTALL_DIR)")
+	INSTALL_DIR := $(subst \,/,$(ORIG_INSTALL_DIR))
 else
 	INSTALL_DIR := $(ORIG_INSTALL_DIR)
 endif
